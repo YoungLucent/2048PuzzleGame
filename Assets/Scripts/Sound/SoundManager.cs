@@ -47,7 +47,6 @@ public class SoundManager : MonoBehaviour
     {
         if (_winSound != null)
         {
-            _audioSource.pitch = 1f;
             _audioSource.PlayOneShot(_winSound);
         }
     }
@@ -56,7 +55,6 @@ public class SoundManager : MonoBehaviour
     {
         if (_winSound != null)
         {
-            _audioSource.pitch = 1f;
             _audioSource.PlayOneShot(_loseSound);
         }
     }
