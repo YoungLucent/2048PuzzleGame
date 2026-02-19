@@ -3,9 +3,6 @@ using Lean.Pool;
 
 public class CubeMerge : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] private float _mergeImpulseThreshold = 1.5f;
-
     private CubeController _controller;
 
     public void Initialize(CubeController controller)
@@ -15,24 +12,34 @@ public class CubeMerge : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        TryMerge(collision);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        TryMerge(collision);
+    }
+
+    private void TryMerge(Collision collision)
+    {
         if (_controller.IsMerging) return;
+
         if (!collision.gameObject.TryGetComponent(out CubeController otherCube)) return;
 
-        if (CanMerge(otherCube, collision))
+        if (CanMerge(otherCube))
         {
             ExecuteMerge(otherCube);
         }
     }
 
-    private bool CanMerge(CubeController otherCube, Collision collision)
+    private bool CanMerge(CubeController otherCube)
     {
         if (!otherCube.gameObject.activeInHierarchy) return false;
         if (otherCube.IsMerging) return false;
+
         if (_controller.Value != otherCube.Value) return false;
 
         if (GetInstanceID() < otherCube.GetInstanceID()) return false;
-
-        if (collision.relativeVelocity.magnitude < _mergeImpulseThreshold) return false;
 
         return true;
     }
